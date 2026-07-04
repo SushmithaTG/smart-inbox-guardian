@@ -1,5 +1,6 @@
 package com.sushmitha.smartinboxguardianbackend.controller;
 
+
 import com.sushmitha.smartinboxguardianbackend.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
