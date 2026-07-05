@@ -14,9 +14,10 @@ public class UserController {
     public User getUser() {
 
         User user = new User(
-                1L,
+
                 "Sushmitha",
-                "sushmithathangavel5@gmail.com"
+                "sushmithathangavel5@gmail.com",
+                "testpassword123"
         );
 
         return user;
