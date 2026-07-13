@@ -1,6 +1,8 @@
 package com.sushmitha.smartinboxguardianbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 //Let MySQL handle the numbering
 
 import jakarta.persistence.Column;
@@ -47,8 +49,6 @@ public class User {
         this.name = name;
         this.email = email;
         this.password=password;
-        this.createdAt=LocalDateTime.now();
-        this.updatedAt=LocalDateTime.now();
     }
 
     public Long getId() {
@@ -68,4 +68,26 @@ public class User {
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
