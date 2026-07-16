@@ -25,7 +25,8 @@
 //    }
 //}
 package com.sushmitha.smartinboxguardianbackend.controller;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import com.sushmitha.smartinboxguardianbackend.model.User;
 import com.sushmitha.smartinboxguardianbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,47 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
+    }
+
     @PostMapping("/save")
-    public User saveUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
+
+        User savedUser = userService.saveUser(user);
+
+        if (savedUser == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists!");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+
+        boolean isLoggedIn = userService.loginUser(
+                user.getEmail(),
+                user.getPassword()
+        );
+
+        if (isLoggedIn) {
+            return ResponseEntity.ok("Login Successful!");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid email or password!");
     }
 
     @PutMapping("/update/{id}")
