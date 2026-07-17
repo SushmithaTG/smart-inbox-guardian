@@ -32,6 +32,7 @@ import com.sushmitha.smartinboxguardianbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.sushmitha.smartinboxguardianbackend.dto.UserDTO;
+import com.sushmitha.smartinboxguardianbackend.security.JwtService;
 import java.util.List;
 
 @RestController
@@ -40,6 +41,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/all")
     public List<UserDTO> getAllUsers() {
@@ -81,7 +85,10 @@ public class UserController {
         );
 
         if (isLoggedIn) {
-            return ResponseEntity.ok("Login Successful!");
+
+            String token = jwtService.generateToken(user.getEmail());
+
+            return ResponseEntity.ok(token);
         }
 
         return ResponseEntity
