@@ -31,6 +31,7 @@ import com.sushmitha.smartinboxguardianbackend.model.User;
 import com.sushmitha.smartinboxguardianbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.sushmitha.smartinboxguardianbackend.dto.UserDTO;
 import java.util.List;
 
 @RestController
@@ -41,17 +42,17 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public UserDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public UserDTO getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 

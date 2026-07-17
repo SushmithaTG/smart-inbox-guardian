@@ -5,7 +5,8 @@ import com.sushmitha.smartinboxguardianbackend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.sushmitha.smartinboxguardianbackend.dto.UserDTO;
+import com.sushmitha.smartinboxguardianbackend.exception.UserNotFoundException;
 import java.util.List;
 
 @Service
@@ -18,16 +19,32 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     // Get all users from database
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDTO getUserById(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
+
+        return convertToDTO(user);
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDTO getUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            return null;
+        }
+
+        return convertToDTO(user);
     }
 
     // Save a new user
@@ -49,7 +66,7 @@ public class UserService {
         if (user != null) {
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 
             return userRepository.save(user);
         }
@@ -70,5 +87,12 @@ public class UserService {
         }
 
         return passwordEncoder.matches(password, user.getPassword());
+    }
+    private UserDTO convertToDTO(User user) {
+        return new UserDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
     }
 }
