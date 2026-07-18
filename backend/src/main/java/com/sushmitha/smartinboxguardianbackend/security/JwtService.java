@@ -6,10 +6,41 @@ import java.util.Date;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+
 import javax.crypto.SecretKey;
 
 @Service
 public class JwtService {
+
+    public String extractEmail(String token) {
+
+        Claims claims = Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+
+        try {
+
+            Jwts.parser()
+                    .verifyWith(SECRET_KEY)
+                    .build()
+                    .parseSignedClaims(token);
+
+            return true;
+
+        } catch (JwtException e) {
+
+            return false;
+        }
+    }
 
     public String generateToken(String email) {
 
