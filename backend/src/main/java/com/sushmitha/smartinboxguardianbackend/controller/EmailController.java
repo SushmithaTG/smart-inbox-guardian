@@ -3,6 +3,7 @@ package com.sushmitha.smartinboxguardianbackend.controller;
 import com.sushmitha.smartinboxguardianbackend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.sushmitha.smartinboxguardianbackend.dto.EmailRequestDTO;
 
 @RestController
 @RequestMapping("/api/email")
@@ -12,12 +13,13 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/send")
-    public String sendEmail(
-            @RequestParam String to,
-            @RequestParam String subject,
-            @RequestParam String body) {
+    public String sendEmail(@RequestBody EmailRequestDTO emailRequest) {
 
-        emailService.sendEmail(to, subject, body);
+        emailService.sendEmail(
+                emailRequest.getTo(),
+                emailRequest.getSubject(),
+                emailRequest.getBody()
+        );
 
         return "Email sent successfully!";
     }
