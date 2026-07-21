@@ -1,18 +1,27 @@
 package com.sushmitha.smartinboxguardianbackend.controller;
 
-import com.sushmitha.smartinboxguardianbackend.service.GmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.google.api.services.gmail.Gmail;
+import com.sushmitha.smartinboxguardianbackend.gmail.GmailServiceFactory;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/gmail")
 public class GmailController {
 
-    @Autowired
-    private GmailService gmailService;
+    private final GmailServiceFactory gmailServiceFactory;
 
-    @GetMapping("/test")
-    public String testConnection() {
-        return gmailService.testConnection();
+    public GmailController(GmailServiceFactory gmailServiceFactory) {
+        this.gmailServiceFactory = gmailServiceFactory;
+    }
+
+    @GetMapping("/authorize")
+    public String authorize() throws Exception {
+
+        Gmail gmail = gmailServiceFactory.getGmailService();
+
+        return "Connected Successfully! Gmail Service = "
+                + gmail.users().getProfile("me").execute().getEmailAddress();
     }
 }
