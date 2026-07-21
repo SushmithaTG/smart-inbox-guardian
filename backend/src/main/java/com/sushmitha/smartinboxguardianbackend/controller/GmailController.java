@@ -1,7 +1,8 @@
 package com.sushmitha.smartinboxguardianbackend.controller;
 
-import com.google.api.services.gmail.Gmail;
-import com.sushmitha.smartinboxguardianbackend.gmail.GmailServiceFactory;
+import java.util.List;
+import com.sushmitha.smartinboxguardianbackend.dto.EmailDTO;
+import com.sushmitha.smartinboxguardianbackend.gmail.GmailReader;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,18 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/gmail")
 public class GmailController {
 
-    private final GmailServiceFactory gmailServiceFactory;
+    private final GmailReader gmailReader;
 
-    public GmailController(GmailServiceFactory gmailServiceFactory) {
-        this.gmailServiceFactory = gmailServiceFactory;
+    public GmailController(GmailReader gmailReader) {
+        this.gmailReader = gmailReader;
     }
 
-    @GetMapping("/authorize")
-    public String authorize() throws Exception {
-
-        Gmail gmail = gmailServiceFactory.getGmailService();
-
-        return "Connected Successfully! Gmail Service = "
-                + gmail.users().getProfile("me").execute().getEmailAddress();
+    @GetMapping("/messages")
+    public List<EmailDTO> getMessages() throws Exception {
+        return gmailReader.getMessages();
     }
 }

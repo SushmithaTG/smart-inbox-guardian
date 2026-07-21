@@ -31,8 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/login",
                                 "/api/users/save",
-                                "/api/email/send",
-                                "/api/gmail/test"
+                                "/api/gmail/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
