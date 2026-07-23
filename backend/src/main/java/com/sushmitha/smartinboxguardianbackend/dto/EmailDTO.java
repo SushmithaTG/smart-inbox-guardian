@@ -1,18 +1,26 @@
 package com.sushmitha.smartinboxguardianbackend.dto;
+import com.sushmitha.smartinboxguardianbackend.enums.EmailCategory;
+
 
 public class EmailDTO {
 
     private String from;
     private String subject;
     private String snippet;
+    private EmailCategory category;
 
     public EmailDTO() {
     }
 
-    public EmailDTO(String from, String subject, String snippet) {
+    public EmailDTO(String from,
+                    String subject,
+                    String snippet,
+                    EmailCategory category) {
+
         this.from = from;
         this.subject = subject;
         this.snippet = snippet;
+        this.category = category;
     }
 
     public String getFrom() {
@@ -37,5 +45,13 @@ public class EmailDTO {
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public EmailCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(EmailCategory category) {
+        this.category = category;
     }
 }

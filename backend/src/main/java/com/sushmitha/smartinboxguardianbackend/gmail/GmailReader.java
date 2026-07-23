@@ -6,6 +6,9 @@ import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
 import com.sushmitha.smartinboxguardianbackend.dto.EmailDTO;
 import org.springframework.stereotype.Component;
+import com.sushmitha.smartinboxguardianbackend.enums.EmailCategory;
+import com.sushmitha.smartinboxguardianbackend.util.EmailCategorizer;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +59,13 @@ public class GmailReader {
                 }
             }
 
+            EmailCategory category = EmailCategorizer.categorize(from);
+
             emails.add(new EmailDTO(
                     from,
                     subject,
-                    fullMessage.getSnippet()
+                    fullMessage.getSnippet(),
+                    category
             ));
         }
 
@@ -103,10 +109,13 @@ public class GmailReader {
                 }
             }
 
+            EmailCategory category = EmailCategorizer.categorize(from);
+
             emails.add(new EmailDTO(
                     from,
                     subject,
-                    fullMessage.getSnippet()
+                    fullMessage.getSnippet(),
+                    category
             ));
         }
 
