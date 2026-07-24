@@ -8,6 +8,9 @@ import com.sushmitha.smartinboxguardianbackend.dto.EmailDTO;
 import org.springframework.stereotype.Component;
 import com.sushmitha.smartinboxguardianbackend.enums.EmailCategory;
 import com.sushmitha.smartinboxguardianbackend.util.EmailCategorizer;
+import com.sushmitha.smartinboxguardianbackend.enums.EmailPriority;
+import com.sushmitha.smartinboxguardianbackend.util.EmailPriorityDetector;
+
 
 
 import java.util.ArrayList;
@@ -61,11 +64,18 @@ public class GmailReader {
 
             EmailCategory category = EmailCategorizer.categorize(from);
 
+            EmailPriority priority = EmailPriorityDetector.detect(
+                    from,
+                    subject,
+                    fullMessage.getSnippet()
+            );
+
             emails.add(new EmailDTO(
                     from,
                     subject,
                     fullMessage.getSnippet(),
-                    category
+                    category,
+                    priority
             ));
         }
 
@@ -111,11 +121,18 @@ public class GmailReader {
 
             EmailCategory category = EmailCategorizer.categorize(from);
 
+            EmailPriority priority = EmailPriorityDetector.detect(
+                    from,
+                    subject,
+                    fullMessage.getSnippet()
+            );
+
             emails.add(new EmailDTO(
                     from,
                     subject,
                     fullMessage.getSnippet(),
-                    category
+                    category,
+                    priority
             ));
         }
 
